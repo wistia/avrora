@@ -79,7 +79,7 @@ defmodule Avrora.Resolver do
          {:ok, nil} <- memory_storage().get(name),
          {:ok, schema} <- file_storage().get(name) do
       response =
-        if is_nil(schema_name.version),
+        if is_nil(schema_name.version) && match?(%Avrora.Schema{}, schema),
           do: registry_storage().put(schema_name.name, schema.json),
           else: registry_storage().get(name)
 

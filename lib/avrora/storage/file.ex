@@ -36,7 +36,7 @@ defmodule Avrora.Storage.File do
       "io.confluent.Payment"
   """
   def get(key) when is_binary(key) do
-    with {:ok, body} <- read_schema_file_by_name(key),
+    with {:ok, body} when not is_nil(body) <- read_schema_file_by_name(key),
          do: Schema.parse(body, &read_schema_file_by_name/1)
   end
 
@@ -56,7 +56,10 @@ defmodule Avrora.Storage.File do
       end
 
       Logger.debug("reading schema `#{schema_name.name}` from the file #{filepath}")
-      File.read(filepath)
+
+      with {:error, :enoent} <- File.read(filepath) do
+        {:ok, nil}
+      end
     end
   end
 

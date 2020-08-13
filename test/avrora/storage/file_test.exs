@@ -50,7 +50,7 @@ defmodule Avrora.Storage.FileTest do
     end
 
     test "when schema file was not found" do
-      assert File.get("io.confluent.Unknown") == {:error, :enoent}
+      assert File.get("io.confluent.Unknown") == {:ok, nil}
     end
 
     test "when schema name was given as a global ID" do
